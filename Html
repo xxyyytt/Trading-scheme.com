@@ -1,0 +1,5 @@
+curl -X POST https://api.derivws.com/trading/v1/options/accounts \
+  -H "Deriv-App-ID: YOUR_APP_ID" \
+  -H "Authorization: Bearer YOUR_OAUTH_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"currency": "USD", "group": "row", "account_type": "demo"}'
