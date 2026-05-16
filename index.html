@@ -3,28 +3,323 @@
 <head>
   <title>My Trading Site</title>
   <style>
-    body{
-      font-family: Arial;
-      text-align:center;
-      margin-top:100px;
-      background:#111;
-      color:white;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    button{
-      padding:15px 30px;
-      font-size:20px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .tagline {
+      font-size: 18px;
+      color: #e0e0e0;
+      margin-bottom: 30px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 40px;
+      max-width: 500px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .features {
+      list-style: none;
+      margin-bottom: 30px;
+    }
+
+    .features li {
+      padding: 12px 0;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .features li:before {
+      content: "✓";
+      color: #4ade80;
+      font-weight: bold;
+      margin-right: 15px;
+      font-size: 20px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .api-status {
+      background: rgba(255, 193, 7, 0.2);
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 25px;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #b0b0b0;
+      font-size: 14px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background-color: #2a2a2a;
+      margin: 10% auto;
+      padding: 30px;
+      border: 1px solid #667eea;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: white;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #667eea;
+      border-radius: 5px;
+      background: #1a1a1a;
+      color: white;
+      font-size: 14px;
+    }
+
+    .modal button {
+      width: 100%;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
 
-<h1>My Trading Website</h1>
-<p>Connected to Deriv API soon</p>
+<header>
+  <h1>🚀 Trading Scheme</h1>
+  <p class="tagline">Your Gateway to Professional Trading</p>
+</header>
 
-<button>Start Trading</button>
+<div class="container">
+  <h2 style="text-align: center; margin-bottom: 25px;">Why Choose Us?</h2>
+  
+  <ul class="features">
+    <li>Real-time Market Data</li>
+    <li>Advanced Trading Tools</li>
+    <li>24/7 Customer Support</li>
+    <li>Secure & Regulated Platform</li>
+    <li>Low Trading Fees</li>
+  </ul>
+
+  <div class="button-group">
+    <button class="btn-primary" onclick="openLoginModal()">🔐 Login</button>
+    <button class="btn-primary" onclick="openSignupModal()">📝 Sign Up</button>
+  </div>
+
+  <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="startTrading()">Start Trading Now</button>
+
+  <div class="api-status">
+    ⚠️ <strong>Status:</strong> Deriv API integration coming soon. Currently in development phase.
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeLoginModal()">&times;</span>
+    <h2 style="margin-bottom: 20px;">Login to Your Account</h2>
+    <input type="email" placeholder="Enter your email" id="loginEmail">
+    <input type="password" placeholder="Enter your password" id="loginPassword">
+    <button class="btn-primary" onclick="handleLogin()">Login</button>
+    <p style="text-align: center; margin-top: 15px; font-size: 14px;">
+      Don't have an account? <a href="#" onclick="switchToSignup()" style="color: #667eea;">Sign up here</a>
+    </p>
+  </div>
+</div>
+
+<!-- Signup Modal -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeSignupModal()">&times;</span>
+    <h2 style="margin-bottom: 20px;">Create Your Account</h2>
+    <input type="text" placeholder="Full Name" id="signupName">
+    <input type="email" placeholder="Email Address" id="signupEmail">
+    <input type="password" placeholder="Create Password" id="signupPassword">
+    <input type="password" placeholder="Confirm Password" id="signupConfirm">
+    <button class="btn-primary" onclick="handleSignup()">Create Account</button>
+    <p style="text-align: center; margin-top: 15px; font-size: 14px;">
+      Already have an account? <a href="#" onclick="switchToLogin()" style="color: #667eea;">Login here</a>
+    </p>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Trading Scheme. All rights reserved.</p>
+  <p style="margin-top: 10px;">Contact: support@trading-scheme.com | Phone: +1-800-TRADING</p>
+</footer>
+
+<script>
+  function openLoginModal() {
+    document.getElementById("loginModal").style.display = "block";
+    document.getElementById("signupModal").style.display = "none";
+  }
+
+  function closeLoginModal() {
+    document.getElementById("loginModal").style.display = "none";
+  }
+
+  function openSignupModal() {
+    document.getElementById("signupModal").style.display = "block";
+    document.getElementById("loginModal").style.display = "none";
+  }
+
+  function closeSignupModal() {
+    document.getElementById("signupModal").style.display = "none";
+  }
+
+  function switchToSignup() {
+    closeLoginModal();
+    openSignupModal();
+  }
+
+  function switchToLogin() {
+    closeSignupModal();
+    openLoginModal();
+  }
+
+  function handleLogin() {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+    
+    if (email && password) {
+      alert("✅ Login successful! Welcome back, " + email + "!");
+      closeLoginModal();
+    } else {
+      alert("❌ Please fill in all fields!");
+    }
+  }
+
+  function handleSignup() {
+    const name = document.getElementById("signupName").value;
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+    const confirm = document.getElementById("signupConfirm").value;
+    
+    if (name && email && password && confirm) {
+      if (password !== confirm) {
+        alert("❌ Passwords do not match!");
+        return;
+      }
+      alert("✅ Account created successfully! Welcome, " + name + "!");
+      closeSignupModal();
+    } else {
+      alert("❌ Please fill in all fields!");
+    }
+  }
+
+  function startTrading() {
+    alert("🚀 Welcome to Trading Scheme!\n\nPlease login or create an account to start trading.\n\nDeriv API integration coming soon!");
+    openLoginModal();
+  }
+
+  // Close modal when clicking outside of it
+  window.onclick = function(event) {
+    const loginModal = document.getElementById("loginModal");
+    const signupModal = document.getElementById("signupModal");
+    if (event.target == loginModal) {
+      loginModal.style.display = "none";
+    }
+    if (event.target == signupModal) {
+      signupModal.style.display = "none";
+    }
+  }
+</script>
 
 </body>
 </html>
