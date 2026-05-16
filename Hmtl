@@ -1,0 +1,5 @@
+grant_type=authorization_code
+client_id=YOUR_CLIENT_ID
+code=AUTH_CODE_FROM_CALLBACK
+code_verifier=YOUR_ORIGINAL_CODE_VERIFIER
+redirect_uri=https://your-app.com/callback
