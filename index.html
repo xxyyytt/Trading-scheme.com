@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Trading Scheme.com - AI-Powered Trading Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       margin: 0;
@@ -9,42 +10,52 @@
       box-sizing: border-box;
     }
     
-    body {
+    html, body {
+      width: 100%;
+      height: 100%;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
       color: white;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
       min-height: 100vh;
-      padding: 20px;
     }
 
     header {
       text-align: center;
-      margin-bottom: 40px;
-      padding-top: 20px;
+      margin-bottom: 20px;
+      padding-top: 10px;
     }
 
     h1 {
-      font-size: 48px;
+      font-size: 56px;
       margin-bottom: 10px;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .tagline {
-      font-size: 18px;
+      font-size: 20px;
       color: #e0e0e0;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     .nav-tabs {
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
 
     .nav-btn {
-      padding: 12px 25px;
+      padding: 14px 30px;
       border: 2px solid white;
       background: transparent;
       color: white;
@@ -53,7 +64,7 @@
       font-weight: bold;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      font-size: 14px;
+      font-size: 16px;
     }
 
     .nav-btn.active {
@@ -70,9 +81,9 @@
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
       border-radius: 15px;
-      padding: 40px;
-      max-width: 600px;
-      margin: 0 auto;
+      padding: 50px;
+      max-width: 700px;
+      width: 90%;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
@@ -83,6 +94,12 @@
 
     .tab-content.active {
       display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .features {
@@ -92,7 +109,7 @@
 
     .features li {
       padding: 12px 0;
-      font-size: 16px;
+      font-size: 18px;
       display: flex;
       align-items: center;
     }
@@ -102,7 +119,7 @@
       color: #4ade80;
       font-weight: bold;
       margin-right: 15px;
-      font-size: 20px;
+      font-size: 24px;
     }
 
     .button-group {
@@ -113,8 +130,8 @@
     }
 
     button {
-      padding: 15px 30px;
-      font-size: 16px;
+      padding: 16px 35px;
+      font-size: 18px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -128,12 +145,12 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       flex: 1;
-      min-width: 150px;
+      min-width: 160px;
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.5);
     }
 
     .btn-secondary {
@@ -141,21 +158,21 @@
       color: white;
       border: 2px solid white;
       flex: 1;
-      min-width: 150px;
+      min-width: 160px;
     }
 
     .btn-secondary:hover {
       background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
     }
 
     .api-status {
       background: rgba(76, 175, 80, 0.2);
       border-left: 4px solid #4caf50;
-      padding: 15px;
+      padding: 18px;
       border-radius: 5px;
       margin-top: 25px;
-      font-size: 14px;
+      font-size: 16px;
     }
 
     .warning-status {
@@ -164,7 +181,7 @@
     }
 
     footer {
-      margin-top: 50px;
+      margin-top: 30px;
       text-align: center;
       color: #b0b0b0;
       font-size: 14px;
@@ -178,25 +195,31 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(5px);
       overflow-y: auto;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.show {
+      display: flex;
     }
 
     .modal-content {
       background-color: #2a2a2a;
-      margin: 5% auto;
-      padding: 30px;
+      padding: 40px;
       border: 1px solid #667eea;
-      border-radius: 10px;
+      border-radius: 15px;
       width: 90%;
-      max-width: 400px;
+      max-width: 450px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     }
 
     .close {
       color: #aaa;
       float: right;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -205,26 +228,55 @@
       color: white;
     }
 
+    .modal h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
     .modal input {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #667eea;
-      border-radius: 5px;
+      padding: 14px;
+      margin: 12px 0;
+      border: 2px solid #667eea;
+      border-radius: 8px;
       background: #1a1a1a;
       color: white;
-      font-size: 14px;
+      font-size: 16px;
+    }
+
+    .modal input:focus {
+      outline: none;
+      border-color: #4ade80;
+      box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
     }
 
     .modal button {
       width: 100%;
-      margin-top: 15px;
+      margin-top: 18px;
+      font-size: 16px;
+      padding: 14px;
+    }
+
+    .modal p {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    .modal a {
+      color: #667eea;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .modal a:hover {
+      color: #4ade80;
     }
 
     .section-title {
       text-align: center;
       margin-bottom: 25px;
-      font-size: 24px;
+      font-size: 28px;
     }
 
     .stats {
@@ -236,35 +288,45 @@
 
     .stat-box {
       background: rgba(102, 126, 234, 0.2);
-      padding: 15px;
+      padding: 20px;
       border-radius: 8px;
       text-align: center;
       border: 1px solid #667eea;
     }
 
     .stat-value {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
       color: #4ade80;
     }
 
     .stat-label {
-      font-size: 12px;
+      font-size: 14px;
       color: #b0b0b0;
-      margin-top: 5px;
+      margin-top: 8px;
     }
 
-    .ai-features {
-      background: rgba(102, 126, 234, 0.1);
-      padding: 15px;
+    .dashboard {
+      text-align: center;
+    }
+
+    .dashboard h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #4ade80;
+    }
+
+    .dashboard-info {
+      background: rgba(74, 222, 128, 0.1);
+      padding: 20px;
       border-radius: 8px;
       margin-bottom: 20px;
-      border-left: 4px solid #667eea;
+      border: 2px solid #4ade80;
     }
 
-    .ai-features h3 {
-      margin-bottom: 10px;
-      color: #4ade80;
+    .dashboard-info p {
+      font-size: 18px;
+      margin: 10px 0;
     }
   </style>
 </head>
@@ -275,11 +337,11 @@
   <p class="tagline">Advanced AI-Powered Trading Platform</p>
 </header>
 
-<div style="text-align: center; margin-bottom: 30px;">
+<div style="text-align: center; margin-bottom: 20px;">
   <div class="nav-tabs">
-    <button class="nav-btn active" onclick="switchTab('home')">🏠 HOME</button>
-    <button class="nav-btn" onclick="switchTab('dtrade')">💰 D-TRADE</button>
-    <button class="nav-btn" onclick="switchTab('aibot')">🤖 AI BOT</button>
+    <button class="nav-btn active" onclick="switchTab(event, 'home')">🏠 HOME</button>
+    <button class="nav-btn" onclick="switchTab(event, 'dtrade')">💰 D-TRADE</button>
+    <button class="nav-btn" onclick="switchTab(event, 'aibot')">🤖 AI BOT</button>
   </div>
 </div>
 
@@ -303,7 +365,7 @@
       <button class="btn-primary" onclick="openSignupModal()">📝 Sign Up</button>
     </div>
 
-    <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="startTrading()">Start Trading Now</button>
+    <button class="btn-secondary" style="width: 100%; margin-top: 20px;" onclick="startTrading()">🚀 START TRADING NOW</button>
 
     <div class="api-status warning-status">
       ⚠️ <strong>Status:</strong> Deriv API integration coming soon. Currently in development phase.
@@ -314,7 +376,7 @@
   <div id="dtrade" class="tab-content">
     <h2 class="section-title">💰 D-Trade Platform</h2>
     
-    <p style="text-align: center; margin-bottom: 20px; line-height: 1.6;">
+    <p style="text-align: center; margin-bottom: 25px; line-height: 1.8; font-size: 18px;">
       Experience seamless trading with our <strong>D-Trade</strong> platform powered by Deriv API integration.
     </p>
 
@@ -360,21 +422,9 @@
   <div id="aibot" class="tab-content">
     <h2 class="section-title">🤖 AI Trading Bot</h2>
     
-    <p style="text-align: center; margin-bottom: 20px; line-height: 1.6;">
+    <p style="text-align: center; margin-bottom: 25px; line-height: 1.8; font-size: 18px;">
       Let our <strong>Advanced AI Bot</strong> automate your trading and maximize your profits 24/7.
     </p>
-
-    <div class="ai-features">
-      <h3>🎯 AI Bot Capabilities:</h3>
-      <ul class="features" style="margin-bottom: 0;">
-        <li>Machine Learning Algorithms</li>
-        <li>Predictive Market Analysis</li>
-        <li>Automated Trade Execution</li>
-        <li>Risk Assessment & Management</li>
-        <li>Real-time Signal Generation</li>
-        <li>Portfolio Optimization</li>
-      </ul>
-    </div>
 
     <div class="stats">
       <div class="stat-box">
@@ -396,12 +446,12 @@
     </div>
 
     <ul class="features">
+      <li>Machine Learning Algorithms</li>
+      <li>Predictive Market Analysis</li>
+      <li>Automated Trade Execution</li>
       <li>Neural Network Analysis</li>
       <li>Sentiment Analysis</li>
       <li>Multi-Asset Scanning</li>
-      <li>Customizable Strategies</li>
-      <li>Backtesting Tools</li>
-      <li>Live Performance Tracking</li>
     </ul>
 
     <div class="button-group">
@@ -420,12 +470,12 @@
 <div id="loginModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeLoginModal()">&times;</span>
-    <h2 style="margin-bottom: 20px;">Login to Your Account</h2>
+    <h2>🔐 LOGIN</h2>
     <input type="email" placeholder="Enter your email" id="loginEmail">
     <input type="password" placeholder="Enter your password" id="loginPassword">
-    <button class="btn-primary" onclick="handleLogin()">Login</button>
-    <p style="text-align: center; margin-top: 15px; font-size: 14px;">
-      Don't have an account? <a href="#" onclick="switchToSignup()" style="color: #667eea;">Sign up here</a>
+    <button class="btn-primary" onclick="handleLogin()">LOGIN NOW</button>
+    <p>
+      Don't have an account? <a onclick="switchModals()">Sign up here</a>
     </p>
   </div>
 </div>
@@ -434,26 +484,41 @@
 <div id="signupModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeSignupModal()">&times;</span>
-    <h2 style="margin-bottom: 20px;">Create Your Account</h2>
+    <h2>📝 CREATE ACCOUNT</h2>
     <input type="text" placeholder="Full Name" id="signupName">
     <input type="email" placeholder="Email Address" id="signupEmail">
     <input type="password" placeholder="Create Password" id="signupPassword">
     <input type="password" placeholder="Confirm Password" id="signupConfirm">
-    <button class="btn-primary" onclick="handleSignup()">Create Account</button>
-    <p style="text-align: center; margin-top: 15px; font-size: 14px;">
-      Already have an account? <a href="#" onclick="switchToLogin()" style="color: #667eea;">Login here</a>
+    <button class="btn-primary" onclick="handleSignup()">CREATE ACCOUNT</button>
+    <p>
+      Already have an account? <a onclick="switchModalsBack()">Login here</a>
     </p>
+  </div>
+</div>
+
+<!-- Dashboard Modal -->
+<div id="dashboardModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeDashboard()">&times;</span>
+    <div class="dashboard">
+      <h2>✅ LOGIN SUCCESSFUL</h2>
+      <div class="dashboard-info">
+        <p><strong>Welcome!</strong> <span id="userNameDisplay"></span></p>
+        <p>Account Status: <span style="color: #4ade80;">ACTIVE</span></p>
+      </div>
+      <button class="btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="goToTrading()">START TRADING 🚀</button>
+      <button class="btn-secondary" style="width: 100%;" onclick="closeDashboard()">Back to Home</button>
+    </div>
   </div>
 </div>
 
 <footer>
   <p>&copy; 2026 Trading Scheme.com. All rights reserved.</p>
-  <p style="margin-top: 10px;">Contact: support@trading-scheme.com | Phone: +1-800-TRADING</p>
-  <p style="margin-top: 10px; font-size: 12px;">Features: D-Trade | AI Bot | Risk Management</p>
+  <p>Contact: support@trading-scheme.com | Phone: +1-800-TRADING</p>
 </footer>
 
 <script>
-  function switchTab(tabName) {
+  function switchTab(event, tabName) {
     // Hide all tabs
     const tabs = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => tab.classList.remove('active'));
@@ -470,65 +535,126 @@
   }
 
   function openLoginModal() {
-    document.getElementById("loginModal").style.display = "block";
-    document.getElementById("signupModal").style.display = "none";
+    document.getElementById("loginModal").classList.add('show');
+    document.getElementById("signupModal").classList.remove('show');
+    document.getElementById("dashboardModal").classList.remove('show');
+    document.getElementById("loginEmail").value = '';
+    document.getElementById("loginPassword").value = '';
   }
 
   function closeLoginModal() {
-    document.getElementById("loginModal").style.display = "none";
+    document.getElementById("loginModal").classList.remove('show');
   }
 
   function openSignupModal() {
-    document.getElementById("signupModal").style.display = "block";
-    document.getElementById("loginModal").style.display = "none";
+    document.getElementById("signupModal").classList.add('show');
+    document.getElementById("loginModal").classList.remove('show');
+    document.getElementById("dashboardModal").classList.remove('show');
+    document.getElementById("signupName").value = '';
+    document.getElementById("signupEmail").value = '';
+    document.getElementById("signupPassword").value = '';
+    document.getElementById("signupConfirm").value = '';
   }
 
   function closeSignupModal() {
-    document.getElementById("signupModal").style.display = "none";
+    document.getElementById("signupModal").classList.remove('show');
   }
 
-  function switchToSignup() {
+  function closeDashboard() {
+    document.getElementById("dashboardModal").classList.remove('show');
+  }
+
+  function switchModals() {
     closeLoginModal();
     openSignupModal();
   }
 
-  function switchToLogin() {
+  function switchModalsBack() {
     closeSignupModal();
     openLoginModal();
   }
 
   function handleLogin() {
-    const email = document.getElementById("loginEmail").value;
+    const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value;
     
-    if (email && password) {
-      alert("✅ Login successful! Welcome back, " + email + "!");
-      closeLoginModal();
-    } else {
-      alert("❌ Please fill in all fields!");
+    if (!email) {
+      alert("❌ Please enter your email!");
+      return;
     }
+    
+    if (!password) {
+      alert("❌ Please enter your password!");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      alert("❌ Please enter a valid email!");
+      return;
+    }
+
+    // Success - Show Dashboard
+    closeLoginModal();
+    showDashboard(email);
   }
 
   function handleSignup() {
-    const name = document.getElementById("signupName").value;
-    const email = document.getElementById("signupEmail").value;
+    const name = document.getElementById("signupName").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
     const password = document.getElementById("signupPassword").value;
     const confirm = document.getElementById("signupConfirm").value;
     
-    if (name && email && password && confirm) {
-      if (password !== confirm) {
-        alert("❌ Passwords do not match!");
-        return;
-      }
-      alert("✅ Account created successfully! Welcome, " + name + "!");
-      closeSignupModal();
-    } else {
-      alert("❌ Please fill in all fields!");
+    if (!name) {
+      alert("❌ Please enter your full name!");
+      return;
     }
+
+    if (!email) {
+      alert("❌ Please enter your email!");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      alert("❌ Please enter a valid email!");
+      return;
+    }
+
+    if (!password) {
+      alert("❌ Please create a password!");
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("❌ Password must be at least 6 characters!");
+      return;
+    }
+
+    if (!confirm) {
+      alert("❌ Please confirm your password!");
+      return;
+    }
+
+    if (password !== confirm) {
+      alert("❌ Passwords do not match!");
+      return;
+    }
+
+    // Success - Show Dashboard
+    closeSignupModal();
+    showDashboard(name);
+  }
+
+  function showDashboard(userInfo) {
+    document.getElementById("userNameDisplay").textContent = userInfo;
+    document.getElementById("dashboardModal").classList.add('show');
+  }
+
+  function goToTrading() {
+    alert("🚀 Welcome to Trading Scheme!\n\nYou are now connected to D-Trade Platform.\n\nStart trading with 100+ assets, leverage up to 1:500, and use our AI Bot for automated trading!");
+    closeDashboard();
   }
 
   function startTrading() {
-    alert("🚀 Welcome to Trading Scheme!\n\nOur platform features:\n✅ D-Trade with 100+ assets\n✅ AI Bot with 87% win rate\n\nPlease login or create an account to start!");
     openLoginModal();
   }
 
@@ -536,11 +662,16 @@
   window.onclick = function(event) {
     const loginModal = document.getElementById("loginModal");
     const signupModal = document.getElementById("signupModal");
+    const dashboardModal = document.getElementById("dashboardModal");
+
     if (event.target == loginModal) {
-      loginModal.style.display = "none";
+      loginModal.classList.remove('show');
     }
     if (event.target == signupModal) {
-      signupModal.style.display = "none";
+      signupModal.classList.remove('show');
+    }
+    if (event.target == dashboardModal) {
+      dashboardModal.classList.remove('show');
     }
   }
 </script>
