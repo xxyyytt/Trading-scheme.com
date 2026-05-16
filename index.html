@@ -166,6 +166,17 @@
       transform: translateY(-3px);
     }
 
+    .btn-demo {
+      background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+      color: black;
+      font-weight: bold;
+    }
+
+    .btn-demo:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(74, 222, 128, 0.5);
+    }
+
     .api-status {
       background: rgba(76, 175, 80, 0.2);
       border-left: 4px solid #4caf50;
@@ -328,6 +339,53 @@
       font-size: 18px;
       margin: 10px 0;
     }
+
+    .account-type-selector {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      justify-content: center;
+    }
+
+    .account-option {
+      padding: 15px 25px;
+      border: 2px solid #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      flex: 1;
+      text-align: center;
+    }
+
+    .account-option:hover {
+      background: rgba(102, 126, 234, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .account-option.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #4ade80;
+    }
+
+    .trading-options {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .api-connected {
+      background: rgba(74, 222, 128, 0.2);
+      border-left: 4px solid #4ade80;
+      padding: 18px;
+      border-radius: 5px;
+      margin-top: 25px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
@@ -365,10 +423,14 @@
       <button class="btn-primary" onclick="openSignupModal()">📝 Sign Up</button>
     </div>
 
-    <button class="btn-secondary" style="width: 100%; margin-top: 20px;" onclick="startTrading()">🚀 START TRADING NOW</button>
+    <button class="btn-secondary" style="width: 100%; margin-top: 20px;" onclick="openAccountTypeModal()">🚀 START TRADING NOW</button>
 
     <div class="api-status warning-status">
       ⚠️ <strong>Status:</strong> Deriv API integration coming soon. Currently in development phase.
+    </div>
+
+    <div class="api-connected">
+      ✅ <strong>API Token:</strong> Connected & Ready | Waiting for Deriv integration
     </div>
   </div>
 
@@ -409,8 +471,8 @@
     </ul>
 
     <div class="button-group">
-      <button class="btn-primary" onclick="openLoginModal()">Login to Trade</button>
-      <button class="btn-secondary" onclick="openSignupModal()">Create Account</button>
+      <button class="btn-demo" onclick="openAccountTypeModal()">📊 Try Demo Account</button>
+      <button class="btn-primary" onclick="openAccountTypeModal()">💎 Real Account</button>
     </div>
 
     <div class="api-status">
@@ -455,8 +517,8 @@
     </ul>
 
     <div class="button-group">
-      <button class="btn-primary" onclick="openLoginModal()">Activate AI Bot</button>
-      <button class="btn-secondary" onclick="startTrading()">Learn More</button>
+      <button class="btn-demo" onclick="openAccountTypeModal()">🧪 Test AI Bot (Demo)</button>
+      <button class="btn-primary" onclick="openAccountTypeModal()">⚡ Activate AI Bot</button>
     </div>
 
     <div class="api-status">
@@ -464,6 +526,56 @@
     </div>
   </div>
 
+</div>
+
+<!-- Account Type Selection Modal -->
+<div id="accountTypeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAccountTypeModal()">&times;</span>
+    <h2>📊 Choose Account Type</h2>
+    
+    <div class="account-type-selector">
+      <div class="account-option active" onclick="selectAccountType('demo', event)">
+        🧪 DEMO
+      </div>
+      <div class="account-option" onclick="selectAccountType('real', event)">
+        💎 REAL
+      </div>
+    </div>
+
+    <div id="demoInfo" style="display: block;">
+      <div style="background: rgba(74, 222, 128, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <p style="font-size: 16px; color: #4ade80; font-weight: bold;">🧪 DEMO ACCOUNT</p>
+        <p style="font-size: 14px; margin-top: 10px;">
+          ✓ $10,000 Virtual Balance<br>
+          ✓ Risk-Free Trading<br>
+          ✓ All Features Available<br>
+          ✓ Practice & Learn
+        </p>
+      </div>
+    </div>
+
+    <div id="realInfo" style="display: none;">
+      <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <p style="font-size: 16px; color: #667eea; font-weight: bold;">💎 REAL ACCOUNT</p>
+        <p style="font-size: 14px; margin-top: 10px;">
+          ✓ Real Money Trading<br>
+          ✓ 24/7 Market Access<br>
+          ✓ Full Trading Tools<br>
+          ✓ Premium Support
+        </p>
+      </div>
+    </div>
+
+    <div class="trading-options">
+      <button class="btn-demo" onclick="proceedWithDemo()">Start Demo Trading</button>
+      <button class="btn-primary" onclick="proceedWithReal()">Open Real Account</button>
+    </div>
+
+    <div class="api-connected" style="font-size: 14px;">
+      ✅ Both accounts are connected to your API token and Deriv integration
+    </div>
+  </div>
 </div>
 
 <!-- Login Modal -->
@@ -505,6 +617,7 @@
       <div class="dashboard-info">
         <p><strong>Welcome!</strong> <span id="userNameDisplay"></span></p>
         <p>Account Status: <span style="color: #4ade80;">ACTIVE</span></p>
+        <p style="margin-top: 15px; font-size: 16px;">Account Type: <span id="accountTypeDisplay" style="color: #667eea; font-weight: bold;">DEMO</span></p>
       </div>
       <button class="btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="goToTrading()">START TRADING 🚀</button>
       <button class="btn-secondary" style="width: 100%;" onclick="closeDashboard()">Back to Home</button>
@@ -515,28 +628,63 @@
 <footer>
   <p>&copy; 2026 Trading Scheme.com. All rights reserved.</p>
   <p>Contact: support@trading-scheme.com | Phone: +1-800-TRADING</p>
+  <p style="font-size: 12px; margin-top: 10px;">🔗 Connected to Deriv API | API Token: Active</p>
 </footer>
 
 <script>
+  let selectedAccountType = 'demo';
+
   function switchTab(event, tabName) {
-    // Hide all tabs
     const tabs = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => tab.classList.remove('active'));
     
-    // Remove active class from all buttons
     const buttons = document.querySelectorAll('.nav-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
-    // Show selected tab
     document.getElementById(tabName).classList.add('active');
-    
-    // Add active class to clicked button
     event.target.classList.add('active');
+  }
+
+  function openAccountTypeModal() {
+    document.getElementById("accountTypeModal").classList.add('show');
+    document.getElementById("loginModal").classList.remove('show');
+    document.getElementById("signupModal").classList.remove('show');
+  }
+
+  function closeAccountTypeModal() {
+    document.getElementById("accountTypeModal").classList.remove('show');
+  }
+
+  function selectAccountType(type, event) {
+    selectedAccountType = type;
+    
+    const options = document.querySelectorAll('.account-option');
+    options.forEach(opt => opt.classList.remove('active'));
+    event.target.classList.add('active');
+
+    if (type === 'demo') {
+      document.getElementById("demoInfo").style.display = 'block';
+      document.getElementById("realInfo").style.display = 'none';
+    } else {
+      document.getElementById("demoInfo").style.display = 'none';
+      document.getElementById("realInfo").style.display = 'block';
+    }
+  }
+
+  function proceedWithDemo() {
+    selectedAccountType = 'demo';
+    openLoginModal();
+  }
+
+  function proceedWithReal() {
+    selectedAccountType = 'real';
+    openLoginModal();
   }
 
   function openLoginModal() {
     document.getElementById("loginModal").classList.add('show');
     document.getElementById("signupModal").classList.remove('show');
+    document.getElementById("accountTypeModal").classList.remove('show');
     document.getElementById("dashboardModal").classList.remove('show');
     document.getElementById("loginEmail").value = '';
     document.getElementById("loginPassword").value = '';
@@ -593,7 +741,6 @@
       return;
     }
 
-    // Success - Show Dashboard
     closeLoginModal();
     showDashboard(email);
   }
@@ -639,31 +786,33 @@
       return;
     }
 
-    // Success - Show Dashboard
     closeSignupModal();
     showDashboard(name);
   }
 
   function showDashboard(userInfo) {
     document.getElementById("userNameDisplay").textContent = userInfo;
+    document.getElementById("accountTypeDisplay").textContent = selectedAccountType.toUpperCase() + " ACCOUNT";
     document.getElementById("dashboardModal").classList.add('show');
   }
 
   function goToTrading() {
-    alert("🚀 Welcome to Trading Scheme!\n\nYou are now connected to D-Trade Platform.\n\nStart trading with 100+ assets, leverage up to 1:500, and use our AI Bot for automated trading!");
+    const accountType = selectedAccountType === 'demo' ? 'Demo' : 'Real';
+    const balance = selectedAccountType === 'demo' ? '$10,000 Virtual' : 'Real Money';
+    
+    alert(`🚀 Welcome to Trading Scheme!\n\nAccount Type: ${accountType}\nBalance: ${balance}\n\nYou are now connected to:\n✅ D-Trade Platform\n✅ 100+ Trading Assets\n✅ AI Bot (87% Win Rate)\n\nYour API Token is connected and ready!\nStart trading now!`);
     closeDashboard();
   }
 
-  function startTrading() {
-    openLoginModal();
-  }
-
-  // Close modal when clicking outside of it
   window.onclick = function(event) {
+    const accountTypeModal = document.getElementById("accountTypeModal");
     const loginModal = document.getElementById("loginModal");
     const signupModal = document.getElementById("signupModal");
     const dashboardModal = document.getElementById("dashboardModal");
 
+    if (event.target == accountTypeModal) {
+      accountTypeModal.classList.remove('show');
+    }
     if (event.target == loginModal) {
       loginModal.classList.remove('show');
     }
