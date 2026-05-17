@@ -1,0 +1,340 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deriv Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.connect-btn {
+  background: #22c55e;
+  color: white;
+}
+
+.trade-btn {
+  background: #3b82f6;
+  color: white;
+}
+
+.danger-btn {
+  background: #ef4444;
+  color: white;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+#log {
+  background: black;
+  color: #00ff88;
+  padding: 12px;
+  border-radius: 8px;
+  height: 220px;
+  overflow-y: auto;
+  font-size: 13px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.stat-box {
+  background: #334155;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.label {
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+.value {
+  font-size: 22px;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Deriv Trading Dashboard</h1><div class="card">
+  <h3>API Connection</h3>
+
+  <input
+    type="password"
+    id="token"
+    placeholder="Paste your Deriv API Token"
+  />
+
+  <button class="connect-btn" onclick="connectAccount()">
+    Connect Account
+  </button>
+</div>
+
+<div class="stats">
+  <div class="stat-box">
+    <div class="label">Account ID</div>
+    <div class="value" id="accountId">---</div>
+  </div>
+
+  <div class="stat-box">
+    <div class="label">Balance</div>
+    <div class="value" id="balance">---</div>
+  </div>
+
+  <div class="stat-box">
+    <div class="label">Currency</div>
+    <div class="value" id="currency">---</div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Trading Controls</h3>
+
+  <button class="trade-btn" onclick="buyRiseTrade()">
+    Buy Rise (CALL)
+  </button>
+
+  <button class="danger-btn" onclick="buyFallTrade()">
+    Buy Fall (PUT)
+  </button>
+
+  <button class="trade-btn" onclick="buyOverTrade()">
+    Buy Over
+  </button>
+
+  <button class="danger-btn" onclick="buyUnderTrade()">
+    Buy Under
+  </button>
+</div>
+
+<div class="card">
+  <h3>Logs</h3>
+  <div id="log"></div>
+</div>
+
+  </div>  <script>
+    let ws;
+    let connected = false;
+
+    function addLog(message) {
+      const log = document.getElementById('log');
+      log.innerHTML += message + '<br>';
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function connectAccount() {
+      const token = document.getElementById('token').value;
+
+      if (!token) {
+        alert('Paste API token first');
+        return;
+      }
+
+      ws = new WebSocket(
+        'wss://ws.binaryws.com/websockets/v3?app_id=1089'
+      );
+
+      ws.onopen = () => {
+        addLog('Connected to Deriv server');
+
+        ws.send(
+          JSON.stringify({
+            authorize: token,
+          })
+        );
+      };
+
+      ws.onmessage = (msg) => {
+        const data = JSON.parse(msg.data);
+
+        console.log(data);
+        addLog(JSON.stringify(data));
+
+        if (data.msg_type === 'authorize') {
+          connected = true;
+
+          document.getElementById('accountId').innerText =
+            data.authorize.loginid;
+
+          document.getElementById('balance').innerText =
+            data.authorize.balance;
+
+          document.getElementById('currency').innerText =
+            data.authorize.currency;
+
+          addLog('Authorization successful');
+
+          getBalance();
+        }
+
+        if (data.msg_type === 'balance') {
+          document.getElementById('balance').innerText =
+            data.balance.balance;
+        }
+      };
+
+      ws.onerror = () => {
+        addLog('Connection error');
+      };
+
+      ws.onclose = () => {
+        connected = false;
+        addLog('Disconnected');
+      };
+    }
+
+    function getBalance() {
+      if (!connected) return;
+
+      ws.send(
+        JSON.stringify({
+          balance: 1,
+          subscribe: 1,
+        })
+      );
+    }
+
+    function buyRiseTrade() {
+      if (!connected) {
+        alert('Connect account first');
+        return;
+      }
+
+      ws.send(
+        JSON.stringify({
+          buy: 1,
+          price: 1,
+          parameters: {
+            amount: 1,
+            basis: 'stake',
+            contract_type: 'CALL',
+            currency: 'USD',
+            duration: 1,
+            duration_unit: 'm',
+            symbol: 'R_100',
+          },
+        })
+      );
+
+      addLog('Rise trade sent');
+    }
+
+    function buyFallTrade() {
+      if (!connected) {
+        alert('Connect account first');
+        return;
+      }
+
+      ws.send(
+        JSON.stringify({
+          buy: 1,
+          price: 1,
+          parameters: {
+            amount: 1,
+            basis: 'stake',
+            contract_type: 'PUT',
+            currency: 'USD',
+            duration: 1,
+            duration_unit: 'm',
+            symbol: 'R_100',
+          },
+        })
+      );
+
+      addLog('Fall trade sent');
+    }
+
+    function buyOverTrade() {
+      if (!connected) {
+        alert('Connect account first');
+        return;
+      }
+
+      ws.send(
+        JSON.stringify({
+          buy: 1,
+          price: 1,
+          parameters: {
+            amount: 1,
+            basis: 'stake',
+            contract_type: 'DIGITOVER',
+            barrier: 5,
+            currency: 'USD',
+            duration: 1,
+            duration_unit: 't',
+            symbol: 'R_100',
+          },
+        })
+      );
+
+      addLog('Over trade sent');
+    }
+
+    function buyUnderTrade() {
+      if (!connected) {
+        alert('Connect account first');
+        return;
+      }
+
+      ws.send(
+        JSON.stringify({
+          buy: 1,
+          price: 1,
+          parameters: {
+            amount: 1,
+            basis: 'stake',
+            contract_type: 'DIGITUNDER',
+            barrier: 5,
+            currency: 'USD',
+            duration: 1,
+            duration_unit: 't',
+            symbol: 'R_100',
+          },
+        })
+      );
+
+      addLog('Under trade sent');
+    }
+  </script></body>
+</html>
